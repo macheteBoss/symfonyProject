@@ -1,0 +1,134 @@
+{% extends 'profile_base.html.twig' %}
+
+{% block headerName %}Заказы пользователя{% endblock %}
+
+{% block navigation_links %}
+    <li>
+        <a href="{{ path('lk') }}">Главная</a>
+    </li>
+    {% if app.request.attributes.get('_route') == 'lk_orders' %}
+        <li class="active">Заказы</li>
+    {% else %}
+        <li>
+            <a href="{{ path('lk_orders') }}">Заказы</a>
+        </li>
+        <li class="active">Заказ #{{ order.id }}</li>
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    {% if app.request.attributes.get('_route') == 'lk_orders' %}
+        {% for flash in app.flashes('notification') %}
+            <div class="alert alert-success" role="alert">{{ flash }}</div>
+        {% endfor %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Девайс</th>
+                    <th scope="col">Кол-во дней</th>
+                    <th scope="col">Цена, руб.</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody class = "table-hover">
+                {% for key, order in orders %}
+                    <tr>
+                        <th scope="row">{{ key + 1 }}</th>
+                        <td>{{ order.device.name }} + {{ formatWord(order.countJoystick, ['джойстик', 'джойстика', 'джойстиков']) }}</td>
+                        <td>{{ order.days }}</td>
+                        <td>{{ order.price }}</td>
+                        <td>{{ order.dateTime }}</td>
+                        <td class = "{{ order.status.code }}">{{ order.status.name }}</td>
+                        <td class = "links-action-table">
+                            <a href = "{{ path('lk_order', {id: order.id}) }}" class = "link-edit-element" title = "Перейти к заказу"><em class="fa fa-eye"></em></a>
+                            {% if order.status.code == 'accepted' %}
+                                <a href = "{{ path('lk_cancelOrder', {id: order.id}) }}" class = "link-remove-element" title = "Отменить заказ"><em class="fa fa-times"></em></a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <fieldset>
+            <legend>Заказ #{{ order.id }}</legend>
+            <table class="table order-table">
+                <tbody>
+                    <tr>
+                        <td><strong>ID</strong></td>
+                        <td>{{ order.id }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Дата заказа</strong></td>
+                        <td>{{ order.dateTime }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Статус</strong></td>
+                        <td>{{ order.status.name }}</td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td><strong>Имя</strong></td>
+                        <td>{{ order.name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Телефон</strong></td>
+                        <td>{{ order.phone }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table order-table">
+                <tbody>
+                    <tr>
+                        <td><strong>Девайс</strong></td>
+                        <td>{{ order.device.name }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Кол-во джойстиков</strong></td>
+                        <td>{{ order.countJoystick }}</td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td><strong>Продолжительность, дней</strong></td>
+                        <td>{{ order.days }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table order-table">
+                <tbody>
+                    <tr>
+                        <td><strong>Адрес доставки</strong></td>
+                        <td>{{ order.address }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Комментарий</strong></td>
+                        <td>{{ order.comment }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if order.promoCode %}
+                <table class="table order-table">
+                    <tbody>
+                    <tr>
+                        <td><strong>Использован промо-код:</strong></td>
+                        <td><strong>{{ order.promoCode.code }}</strong> (Скидка: {{ order.promoCode.percent }}%)</td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="priceFormBlock">
+                        <h4>Цена заказа:</h4>
+                        <h3><div class = "js-edit-price">{{ order.price }}</div> руб.</h3>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    {% endif %}
+{% endblock %}

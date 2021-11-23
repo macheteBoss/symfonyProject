@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% form_theme resetForm 'fields.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    <div id="resetPassword">
+        <div class="content-profile container">
+            <div class="masonry-grid row">
+                <div class="masonry-grid-sizer col-sm-3"></div>
+                <div class="masonry-grid-item col-sm-6">
+                    {{ form_start(resetForm) }}
+                        <fieldset>
+                            <legend>Сбросить пароль</legend>
+                            {% for flashError in app.flashes('reset_password_error') %}
+                                <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                            {% endfor %}
+                            {{ form_row(resetForm.plainPassword) }}
+                            <div class = "margin-t-30 margin-b-20">
+                                <button class="btn-theme btn-theme-sm btn-white-bg text-uppercase">Установить пароль</button>
+                            </div>
+
+                            {% include('/paths/footer_form_links.html.twig') %}
+
+                        </fieldset>
+                    {{ form_end(resetForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

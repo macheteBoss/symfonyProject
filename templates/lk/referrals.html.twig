@@ -1,0 +1,78 @@
+{% extends 'profile_base.html.twig' %}
+
+{% block headerName %}Рефералы пользователя{% endblock %}
+
+{% block navigation_links %}
+    <li>
+        <a href="{{ path('lk') }}">Главная</a>
+    </li>
+    <li class="active">Рефералы</li>
+{% endblock %}
+
+{% block main %}
+    {% if app.user.parentUser %}
+        {% set parentUser = app.user.parentUser %}
+        <div class="alert alert-success parentUsersBlock">
+            <div>
+                Вы зарегестрированы по ссылке пользователя: <strong>{{ parentUser.name }}</strong>
+            </div>
+            <div class = "margin-t-10">
+                <a class="toggle" href="javascript:void(0);">Подробнее</a>
+                <ul class="inner">
+                    <li>Имя: <strong>{{ parentUser.name }}</strong></li>
+                    <li>Логин: <strong>{{ parentUser.username }}</strong></li>
+                    <li>Телефон: <strong>{{ parentUser.phone }}</strong></li>
+                    <li>Email: <strong>{{ parentUser.email }}</strong></li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Логин</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Телефон</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Кол-во заказов</th>
+                </tr>
+            </thead>
+            <tbody class = "table-hover">
+            {% for key, user in users %}
+                <tr>
+                    <th scope="row">{{ key + 1 }}</th>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.completedOrders|length }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr />
+
+    {% include 'paths/refferal_block.html.twig' with {'refToken': app.user.refToken} %}
+
+    <script>
+        $('.toggle').click(function(e) {
+            e.preventDefault();
+
+            var $this = $(this);
+
+            if ($this.next().hasClass('show')) {
+                $this.text('Подробнее');
+                $this.next().removeClass('show');
+                $this.next().slideUp(350);
+            } else {
+                $this.text('Скрыть');
+                $this.next().toggleClass('show');
+                $this.next().slideDown(350);
+            }
+        });
+    </script>
+{% endblock %}

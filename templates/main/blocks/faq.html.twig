@@ -1,0 +1,60 @@
+{% set items = data.items %}
+
+<!-- Who -->
+<div id="{{ getValidCodeBlock(data.entity.name) }}">
+    <div class="bg-color-sky-light">
+        <div class="content-lg container">
+            <div class="row">
+                <div class="col-md-5 col-sm-5 md-margin-b-60">
+                    {% if data.title or data.text %}
+                        <div class="margin-t-50 margin-b-30">
+                            {% if data.title %}
+                                <h2>{{ data.title }}</h2>
+                            {% endif %}
+                            {% if data.text %}
+                                <p>{{ data.text }}</p>
+                            {% endif %}
+                            <ul class="list-unstyled footer-list">
+                                <li class="footer-list-item" style = "margin:20px 0;"><b>Велком:</b><br><a href="tel:375256425924">+375(25) 642-59-24</a></li>
+                                <li class="footer-list-item"><b>МТС:</b><br><a href="tel:375292177701">+375(29) 217-77-01</a></li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if data.button %}
+                        <div class = "js_nav-item">
+                            <a href="#{{ data.urlButton }}" class="btn-theme btn-theme-sm btn-white-bg text-uppercase">{{ data.titleButton }}</a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if items|length > 0 %}
+                    <div class="col-md-5 col-sm-7 col-md-offset-2">
+                        <!-- Accordion -->
+                        <div class="accordion">
+                            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                {% for item in items %}
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" role="tab" id="heading{{ loop.index }}">
+                                            <h4 class="panel-title">
+                                                <a class="panel-title-child" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index }}" aria-expanded="{% if loop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ loop.index }}">
+                                                    {{ item.title }}
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse{{ loop.index }}" class="panel-collapse collapse{% if loop.first %} in{% endif %}" role="tabpanel" aria-labelledby="heading{{ loop.index }}">
+                                            <div class="panel-body">
+                                                {{ item.description }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- End Accodrion -->
+                    </div>
+                {% endif %}
+            </div>
+            <!--// end row -->
+        </div>
+    </div>
+</div>
+<!-- End Who -->

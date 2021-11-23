@@ -1,0 +1,7 @@
+<div id="{{ getValidCodeBlock(data.entity.name) }}">
+    <div{% if loop.last == false %} class="section-seperator"{% endif %}>
+        <div class="content-lg container">
+            {% include '/paths/header_block.html.twig' with {'data': block} %}
+        </div>
+    </div>
+</div>

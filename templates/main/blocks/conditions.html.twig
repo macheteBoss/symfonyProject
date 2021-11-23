@@ -1,0 +1,32 @@
+{% set items = data.items %}
+
+<!-- Service -->
+<div id="{{ getValidCodeBlock(data.entity.name) }}">
+    <div class="bg-color-sky-light" data-auto-height="true">
+        <div class="content-lg container">
+            {% include '/paths/header_block.html.twig' with {'data': block} %}
+            {% if items|length > 0 %}
+                <div class="row row-space-1 margin-b-2">
+                    {% for item in items %}
+                        <div class="col-sm-4 sm-margin-b-2">
+                            <div class="service{% if item.allotted %} bg-color-base{% endif %}" data-height="height">
+                                <div class="service-element">
+                                    <i class="service-icon {{ item.icon }}{% if item.allotted %} color-white{% endif %}"></i>
+                                </div>
+                                <div class="service-info">
+                                    <h3{% if item.allotted %} class="color-white"{% endif %}>{{ item.title }}</h3>
+                                    {% if item.description %}
+                                        <p class="{% if item.allotted %}color-white {% endif %}margin-b-5">{{ item.description }}</p>
+                                    {% endif %}
+                                </div>
+                                <a href="#" class="content-wrapper-link"></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!--// end row -->
+        </div>
+    </div>
+</div>
+<!-- End Service -->

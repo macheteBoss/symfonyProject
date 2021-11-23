@@ -1,0 +1,27 @@
+{% set items = data.items %}
+
+<!-- Products -->
+<div id="{{ getValidCodeBlock(data.entity.name) }}">
+    <div class="content-lg container">
+        {% include '/paths/header_block.html.twig' with {'data': block} %}
+        {% if items|length > 0 %}
+            <div class="row loadGames">
+                {% for item in items %}
+                    <div class="col-sm-4 sm-margin-b-50 loadGamesItem">
+                        <div class="margin-b-20">
+                            <img class="img-responsive" src="{{ asset(item.imageUrl) }}" alt="Latest Products Image">
+                        </div>
+                        <h4>
+                            <a href="javascript:void(0)">{{ item.title }}</a>
+                            <span class="text-uppercase margin-l-20">{% if item.team %}Можно в 2-м{% else %}Одиночная игра{% endif %}</span>
+                        </h4>
+                    </div>
+                {% endfor %}
+            </div>
+            <div style = "margin-top : 50px; text-align: center;">
+                <button class="btn-theme btn-theme-sm btn-white-bg text-uppercase" id = "moreGames">Показать ещё</button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+<!-- End Products -->

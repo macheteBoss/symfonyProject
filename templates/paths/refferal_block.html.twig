@@ -1,0 +1,19 @@
+<div class="referalBlock">
+    <fieldset>
+        <legend>Привлечение рефералов</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="referral_link">Реферальная ссылка</label>
+                    <input type="text" name = "referral_link" class = "form-control" id = "referral_link" value = "{{ absolute_url(path('app_register', {'refToken': refToken})) }}" readonly>
+                </div>
+                <p>Скопируйте ссылку и передайте вашему другу</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="textForm">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloribus dolorum error ex fuga illum ipsam iure laudantium magni maxime nemo neque officia, quae quod repellendus temporibus tenetur ut!</p>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

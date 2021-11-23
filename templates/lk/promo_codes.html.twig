@@ -1,0 +1,38 @@
+{% extends 'profile_base.html.twig' %}
+
+{% block headerName %}Промо-коды пользователя{% endblock %}
+
+{% block navigation_links %}
+    <li>
+        <a href="{{ path('lk') }}">Главная</a>
+    </li>
+    <li class="active">Промо-коды</li>
+{% endblock %}
+
+{% block main %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Код</th>
+                <th scope="col">Скидка, %</th>
+                <th scope="col">Количество</th>
+            </tr>
+            </thead>
+            <tbody class = "table-hover">
+            {% for key, code in codes %}
+                <tr>
+                    <th scope="row">{{ key + 1 }}</th>
+                    <td>{{ code.code }}</td>
+                    <td>{{ code.percent }}</td>
+                    <td>{{ code.count }}</td>
+                    {% if code.systemic %}
+                        <td>{{ code.description }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

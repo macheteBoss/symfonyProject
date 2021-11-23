@@ -1,0 +1,193 @@
+{% form_theme data.form 'fields.html.twig' %}
+
+<div class="form-order" id = "{{ getValidCodeBlock(data.entity.name) }}">
+    <div{% if loop.last == false %} class="section-seperator"{% endif %}>
+        <div class="content-md container">
+            {{ form_start(data.form) }}
+            <fieldset>
+                <legend>Заказ</legend>
+                <div class="alert form-error alert-danger" role="alert" style = "display:none"></div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        {{ form_row(data.form.name) }}
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        {{ form_row(data.form.phone) }}
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        {{ form_row(data.form.email) }}
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        {{ form_row(data.form.device) }}
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        {{ form_row(data.form.countJoystick) }}
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        {{ form_row(data.form.days) }}
+                    </div>
+                    <div class="col-sm-12">
+                        {{ form_row(data.form.address) }}
+                    </div>
+                    <div class="col-sm-12">
+                        {{ form_row(data.form.comment) }}
+                    </div>
+                </div>
+                {% if app.user == false %}
+                    {{ form_row(data.form.register_me) }}
+                {% else %}
+                    <div class="row">
+                        <div class="col-sm-7 hidden-xs"></div>
+                        <div class="col-sm-5">
+                            <div class="promoCodeInput">
+                                {{ form_row(data.form.promoCode) }}
+                                <a href = "#" class="btn-theme btn-theme-sm btn-white-bg" id = "sendPromo">
+                                    Применить
+                                </a>
+                                <div class="alert field-error" role="alert" style = "display:none"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {{ form_row(data.form.price) }}
+                {% if app.user %}
+                    {{ form_row(data.form.promo) }}
+                {% endif %}
+                <div class = "margin-t-30">
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <button class="btn-theme btn-theme-sm btn-white-bg text-uppercase" type = "submit">
+                                Создать заказ
+                            </button>
+                        </div>
+                        <div class="col-xs-5">
+                            <div class="priceFormBlock">
+                                <h4>Цена заказа:</h4>
+                                <h3><div class = "js-edit-price">58</div> руб.</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            {{ form_end(data.form) }}
+        </div>
+    </div>
+</div>
+
+{% include('paths/success_modal_order.html.twig') %}
+
+<script>
+    $(function() {
+        var percent = false;
+        var $formOrder = $('form[name="order_form"]');
+        var $priceBlock = $formOrder.find('.js-edit-price');
+
+        function generatePrice() {
+            let $sum = 0;
+            let $devicePrice = parseInt($formOrder.find('#order_form_device').find('option:selected').attr('data-price'));
+            let $JoystickPrice = parseInt($formOrder.find('#order_form_countJoystick').attr('data-price'));
+            let $countJoystick = parseInt($formOrder.find('#order_form_countJoystick').val());
+            let $countDays = parseInt($formOrder.find('#order_form_days').val());
+
+            let $discount = 1;
+            switch ($countDays) {
+                case 2:
+                case 3:
+                    $discount = 0.15;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    $discount = 0.2;
+                    break;
+                case 7:
+                    $discount = 0.25;
+                    break;
+                default: break;
+            }
+
+            $sum = $devicePrice * $countDays;
+            if ($countDays > 1) {
+                $sum -= ($devicePrice * $countDays * $discount);
+            }
+            if ($countJoystick > 1) {
+                $sum += ($countJoystick - 1) * $JoystickPrice * $countDays;
+            }
+            if (percent) {
+                $sum -= $sum * (percent/100);
+            }
+
+            $priceBlock.text($sum.toFixed(1));
+        }
+
+        generatePrice();
+
+        $formOrder.submit(function(e) {
+            $formOrder.find('#order_form_price').val($formOrder.find('.js-edit-price').text());
+            $formOrder.find('button').attr('disabled', true);
+            $.ajax({
+                type: $formOrder.attr('method'),
+                url: $formOrder.attr('action'),
+                data: $formOrder.serialize(),
+                dataType: 'JSON',
+                success: function(data) {
+                    var alert = $formOrder.find('.form-error');
+
+                    if (data.result) {
+                        $('#orderModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        })
+                    } else {
+                        alert.text(data.message).show();
+                    }
+
+                    $formOrder.find('button').attr('disabled', false);
+                }
+            })
+            //отмена действия по умолчанию для кнопки submit
+            e.preventDefault();
+        });
+
+        $formOrder.find('#order_form_device, #order_form_countJoystick, #order_form_days').on('change', function () {
+            generatePrice();
+        });
+
+        $('#sendPromo').on('click', function(e) {
+            e.preventDefault();
+            var $send = $(this);
+            $send.addClass('disabled');
+
+            var $promoCodeBlock = $('.promoCodeInput');
+            var $code = $promoCodeBlock.find('#order_form_promoCode');
+
+            $.ajax({
+                type: 'POST',
+                url: '/lk/promoCodes/apply/' + $code.val(),
+                data: {code: $code.val()},
+                dataType: 'JSON',
+                success: function(data) {
+                    var alert = $promoCodeBlock.find('.field-error');
+                    if (alert.hasClass('alert-danger')) {
+                        alert.removeClass('alert-danger');
+                    }
+
+                    if (data.result) {
+                        $code.attr('readonly', true);
+                        alert.addClass('alert-success');
+
+                        percent = data.percent;
+                        generatePrice();
+
+                        $formOrder.find("#order_form_promo").val($code.val());
+                    } else {
+                        $send.removeClass('disabled');
+                        alert.addClass('alert-danger');
+                    }
+                    alert.text(data.message).show();
+                }
+            })
+        });
+
+    });
+</script>

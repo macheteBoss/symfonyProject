@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+    {% if blocks|length > 0 %}
+        {% for block in blocks %}
+            {% include getPathTemplateForBlock(block.entity.name) with {'data': block, 'loop': loop} %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

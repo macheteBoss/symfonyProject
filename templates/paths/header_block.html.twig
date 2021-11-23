@@ -1,0 +1,17 @@
+{% if data.title or data.text %}
+    <div class="row {% if data.button %}margin-b-20{% else %}margin-b-40{% endif %}">
+        <div class="col-sm-6">
+            {% if data.title %}
+                <h2>{{ data.title }}</h2>
+            {% endif %}
+            {% if data.text %}
+                <p>{{ data.text }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+{% if data.button %}
+    <div class = "js_nav-item margin-b-40">
+        <a href="#{{ data.urlButton }}" class="btn-theme btn-theme-sm btn-white-bg text-uppercase">{{ data.titleButton }}</a>
+    </div>
+{% endif %}

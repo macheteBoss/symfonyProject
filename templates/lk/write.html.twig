@@ -1,0 +1,39 @@
+{% extends 'profile_base.html.twig' %}
+{% form_theme writeForm 'fields.html.twig' %}
+
+{% block headerName %}Написать нам{% endblock %}
+
+{% block navigation_links %}
+    <li>
+        <a href="{{ path('lk') }}">Главная</a>
+    </li>
+    <li class="active">Написать нам</li>
+{% endblock %}
+
+{% block main %}
+    <div id="write">
+        <div class="container">
+            <div class="masonry-grid">
+                <div class="masonry-grid-item">
+                    {{ form_start(writeForm) }}
+                        <fieldset>
+                            <legend>Заполните поля обращения</legend>
+                            {% for flashError in app.flashes('write_error') %}
+                                <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                            {% endfor %}
+                            {% for flashSuccess in app.flashes('write_success') %}
+                                <div class="alert alert-success" role="alert">{{ flashSuccess }}</div>
+                            {% endfor %}
+                            {{ form_widget(writeForm) }}
+                            <div class = "margin-b-20">
+                                <button class="btn-theme btn-theme-sm btn-white-bg text-uppercase" type = "submit">
+                                    Отправить
+                                </button>
+                            </div>
+                        </fieldset>
+                    {{ form_end(writeForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

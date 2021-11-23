@@ -1,0 +1,36 @@
+{% set items = data.items %}
+
+<!-- Pricing -->
+<div id="{{ getValidCodeBlock(data.entity.name) }}">
+    <div class="bg-color-sky-light">
+        <div class="content-lg container">
+            {% include '/paths/header_block.html.twig' with {'data': block} %}
+            {% if items|length > 0 %}
+                <div class="row row-space-1">
+                    {% for item in items|slice(0, 3) %}
+                        <div class="col-sm-4 sm-margin-b-2">
+                            <!-- Pricing -->
+                            <div class="pricing{% if item.allotted %} pricing-active{% endif %}">
+                                <div class="margin-b-30">
+                                    <i class="pricing-icon {{ item.icon }}"></i>
+                                    <h3>{{ item.title }} <span> - BLR</span> {{ item.price }}</h3>
+                                    {% if item.description %}
+                                        <p>{{ item.description }}</p>
+                                    {% endif %}
+                                </div>
+                                <ul class="list-unstyled pricing-list margin-b-50">
+                                    {% for row in item.list %}
+                                        <li class="pricing-list-item">{{ row }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <!-- End Pricing -->
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <!--// end row -->
+        </div>
+    </div>
+</div>
+<!-- End Pricing -->

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Password Reset Email Sent{% endblock %}
+
+
+{% block body %}
+    <div id="resetPassword">
+        <div class="content-profile container">
+            <div class="masonry-grid row">
+                <div class="masonry-grid-sizer col-sm-3"></div>
+                <div class="masonry-grid-item col-sm-6">
+                    <form method="post">
+                        <fieldset>
+                            <legend>Получение ссылки</legend>
+                            <div class = "margin-b-30">
+                                <p>
+                                    На вас адрес электронной почты было отправлено электронное письмо, содержащее ссылку, которую вы можете использовать для сброса пароля.<br>
+                                    Внимание! Ссылка истекает через <b>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</b>.
+                                </p>
+                                <p>Если вы не получили электронное письмо, проверьте папку <b>"Спам"</b>.</p>
+                                <p>Если ничего не получилось, пожалуйста, напишите нам: <a class = "special" href="mailto:info@arendapsvtb.by">info@arendapsvtb.by</a></p>
+                            </div>
+                            <a href = "{{ path('app_forgot_password_request') }}" class="btn-theme btn-theme-sm btn-white-bg text-uppercase">Ввести другой Email</a>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

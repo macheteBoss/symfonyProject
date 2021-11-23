@@ -1,0 +1,58 @@
+{% extends 'profile_base.html.twig' %}
+{% form_theme editForm 'fields.html.twig' %}
+
+    {% block headerName %}Профиль пользователя{% endblock %}
+
+{% block navigation_links %}
+    <li>
+        <a href="{{ path('lk') }}">Главная</a>
+    </li>
+    <li class="active">Профиль</li>
+{% endblock %}
+
+{% block main %}
+    {{ form_start(editForm) }}
+    <fieldset>
+        <legend>Обновление данных</legend>
+        <div class="row">
+            <div class="col-md-7 col-sm-6">
+                {% for flashSuccess in app.flashes('success') %}
+                    <div class="alert alert-success" role="alert">{{ flashSuccess }}</div>
+                {% endfor %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(editForm.name) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(editForm.email) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(editForm.phone) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(editForm.username) }}
+                    </div>
+                    <div class="col-md-6">
+                        {{ form_row(editForm.plainPassword) }}
+                    </div>
+                </div>
+                <div>
+                    <button class="btn-theme btn-theme-sm btn-white-bg text-uppercase" type = "submit">
+                        Изменить
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-6">
+                <div class="textForm">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloribus dolorum error ex fuga illum ipsam iure laudantium magni maxime nemo neque officia, quae quod repellendus temporibus tenetur ut!</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloribus dolorum error ex fuga illum ipsam iure laudantium magni maxime nemo neque officia, quae quod repellendus temporibus tenetur ut!</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias atque doloribus dolorum error ex fuga illum ipsam iure laudantium magni maxime nemo neque officia, quae quod repellendus temporibus tenetur ut!</p>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    {{ form_end(editForm) }}
+
+    {% include 'paths/refferal_block.html.twig' with {'refToken': app.user.refToken} %}
+
+{% endblock %}

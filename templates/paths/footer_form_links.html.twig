@@ -1,0 +1,10 @@
+<div>
+    {% if app.request.attributes.get('_route') == 'app_login' %}
+        <a class = "special" href="{{ path('app_forgot_password_request') }}">Забыли пароль?</a>
+    {% else %}
+        <a class = "special" href="{{ path('app_login') }}">Авторизация</a>
+    {% endif %}
+    {% if app.request.attributes.get('_route') != 'app_register' %}
+        <a class = "special" href="{{ path('app_register') }}">Регистрация</a>
+    {% endif %}
+</div>

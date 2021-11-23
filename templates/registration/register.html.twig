@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% form_theme registrationForm 'fields.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div id="register">
+        <div class="content-profile container">
+            <div class="masonry-grid row">
+                <div class="masonry-grid-sizer col-sm-3"></div>
+                <div class="masonry-grid-item col-sm-6">
+                    {{ form_start(registrationForm) }}
+                    <fieldset>
+                        <legend>Регистрация пользователя</legend>
+                        {% for flashError in app.flashes('register_error') %}
+                            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                        {% endfor %}
+                        {{ form_widget(registrationForm) }}
+                        <div class = "margin-b-20">
+                            <button class="btn-theme btn-theme-sm btn-white-bg text-uppercase" type = "submit">
+                                Регистрация
+                            </button>
+                        </div>
+
+                        {% include('/paths/footer_form_links.html.twig') %}
+
+                    </fieldset>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
